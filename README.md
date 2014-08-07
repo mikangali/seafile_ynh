@@ -1,4 +1,1 @@
-seafile_ynh
-===========
-
-Seafile packaged for Yunohost
+Seafile 3.0.4 32bit packaged for Yunohost
