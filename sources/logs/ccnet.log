@@ -1,9 +1,0 @@
-[08/06/14 22:20:03] ../common/session.c(385): Listen on 127.0.0.1 13418
-[08/06/14 22:20:03] ../common/session.c(257): Update pubinfo file
-[08/06/14 22:20:03] ../common/connect-mgr.c(515): Opened port 10001 to listen for incoming peer connections
-[08/06/14 22:20:04] ../common/session.c(365): Accepted a local client
-[08/06/14 22:20:04] ../common/session.c(365): Accepted a local client
-[08/06/14 22:20:04] ../common/session.c(365): Accepted a local client
-[08/06/14 22:20:04] ../common/session.c(365): Accepted a local client
-[08/06/14 22:20:13] ../common/session.c(365): Accepted a local client
-[08/06/14 22:20:38] ../common/peer.c(942): Local peer down
