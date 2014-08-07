@@ -1,10 +1,9 @@
 #!/bin/bash
-
-db_user=seafile
-db_name=seafile
-root_pwd=$(sudo cat /etc/yunohost/mysql)
 domain=$(sudo yunohost app setting seafile domain)
 
-mysql -u root -p$root_pwd -e "DROP DATABASE $db_name ; DROP USER $db_user@localhost ;"
+cd /var/www/seafile/seafile-server-*
+sudo ./seafile.sh stop
+sudo ./seahub.sh stop
+
 sudo rm -rf /var/www/seafile
 sudo rm -f /etc/nginx/conf.d/$domain.d/seafile.conf

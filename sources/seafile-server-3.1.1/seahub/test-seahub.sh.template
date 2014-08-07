@@ -1,0 +1,8 @@
+#!/bin/bash
+
+. setenv.sh
+
+./manage.py test base avatar group notifications
+
+echo $?
+

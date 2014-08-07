@@ -1,0 +1,3 @@
+[08/06/14 22:20:05] ../common/mq-mgr.c(60): [mq client] mq cilent is started
+[08/06/14 22:20:05] ../common/mq-mgr.c(106): [mq mgr] publish to hearbeat mq: seaf_server.heartbeat
+[08/06/14 22:20:05] listen-mgr.c(115): listen on port 12001 for block tranfer

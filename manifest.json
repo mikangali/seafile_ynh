@@ -18,7 +18,8 @@
                 "ask": {
                     "en": "Choose a domain for Seafile"
                 },
-                "example": "domain.org"
+                "example": "domain.org",
+                "default": "wireynh2.mikangali.com"
             },
             {
                 "name": "path",
