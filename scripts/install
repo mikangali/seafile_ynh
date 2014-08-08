@@ -19,11 +19,13 @@ sudo mkdir -p $final_path/installed
 sudo mkdir -p $final_path/seafile-data
 sudo mkdir -p $final_path/seafile-server-$seafile_version
 sudo tar xvzf ../sources/'seafile-server_'$seafile_version'_x86-64.tar'
-sudo mv ../sources/seafile-server-$seafile_version/* $final_path/seafile-server-$seafile_version
+sudo mv seafile-server-$seafile_version/* $final_path/seafile-server-$seafile_version
 sudo mv ../sources/'seafile-server_'$seafile_version'_x86-64.tar' $final_path/installed
 
 # Set permissions to seafile directory
 sudo chown -R www-data: $final_path
+
+# Modify install script with parameters
 
 # Run install script
 
