@@ -28,6 +28,14 @@
                 },
                 "example": "/seafile",
                 "default": "/seafile"
+            },
+            {
+                "name": "server_name",
+                "ask": {
+                    "en": "Choose a name"
+                },
+                "example": "Seafile",
+                "default": "Seafile"
             }
         ]
     }

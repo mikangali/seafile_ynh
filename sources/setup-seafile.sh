@@ -23,10 +23,6 @@ function welcome () {
     echo "which may have problems if your disk is on a NFS/CIFS/USB."
     echo "In these cases, we sugguest you setup seafile server using MySQL."
     echo
-    echo "Press [ENTER] to continue"
-    echo "-----------------------------------------------------------------"
-    read dummy
-    echo
 }
 
 function err_and_quit () {
@@ -187,122 +183,6 @@ function ask_question () {
     fi
 }
 
-function get_server_name () {
-    question="What would you like to use as the name of this seafile server?\nYour seafile users will be able to see the name in their seafile client."
-    hint="You can use a-z, A-Z, 0-9, _ and -, and the length should be 3 ~ 15"
-    ask_question "${question}\n${hint}" "nodefault" "server name"
-    read server_name
-    if [[ "${server_name}" == "" ]]; then
-        echo
-        echo "server name cannot be empty"
-        get_server_name
-    elif [[ ! ${server_name} =~ ^[a-zA-Z0-9_-]{3,14}$ ]]; then
-        printf "\n\033[33m${server_name}\033[m is not a valid name.\n"
-        get_server_name;
-    fi
-    echo
-}
-
-function get_server_ip_or_domain () {
-    question="What is the ip or domain of this server?\nFor example, www.mycompany.com, or, 192.168.1.101"
-    ask_question "${question}\n" "nodefault" "This server's ip or domain"
-    read ip_or_domain
-    if [[ "${ip_or_domain}" == "" ]]; then
-        echo
-        echo "ip or domain cannot be empty"
-        get_server_ip_or_domain
-    fi
-    echo
-}
-
-function get_ccnet_server_port () {
-    question="What tcp port do you want to use for ccnet server?"
-    hint="10001 is the recommended port."
-    default="10001"
-    ask_question "${question}\n${hint}" "${default}"
-    read server_port
-    if [[ "${server_port}" == "" ]]; then
-        server_port="${default}"
-    fi
-    if [[ ! ${server_port} =~ ^[0-9]+$ ]]; then
-        echo "\"${server_port}\" is not a valid port number. "
-        get_ccnet_server_port
-    fi
-    echo
-}
-
-function get_seafile_server_port () {
-    question="What tcp port would you like to use for seafile server?"
-    hint="12001 is the recommended port."
-    default="12001"
-    ask_question "${question}\n${hint}" "${default}"
-    read seafile_server_port
-    if [[ "${seafile_server_port}" == "" ]]; then
-        seafile_server_port="${default}"
-    fi
-    if [[ ! ${seafile_server_port} =~ ^[0-9]+$ ]]; then
-        echo "\"${seafile_server_port}\" is not a valid port number. "
-        get_seafile_server_port
-    fi
-    echo
-}
-
-function get_fileserver_port () {
-    question="What tcp port do you want to use for seafile fileserver?"
-    hint="8082 is the recommended port."
-    default="8082"
-    ask_question "${question}\n${hint}" "${default}"
-    read fileserver_port
-    if [[ "${fileserver_port}" == "" ]]; then
-        fileserver_port="${default}"
-    fi
-    if [[ ! ${fileserver_port} =~ ^[0-9]+$ ]]; then
-        echo "\"${fileserver_port}\" is not a valid port number. "
-        get_fileserver_port
-    fi
-    echo
-}
-
-
-function get_seafile_data_dir () {
-    question="Where would you like to store your seafile data?"
-    note="Please use a volume with enough free space."
-    default=${default_seafile_data_dir}
-    ask_question "${question} \n\033[33mNote: \033[m${note}" "${default}"
-    read seafile_data_dir
-    if [[ "${seafile_data_dir}" == "" ]]; then
-        seafile_data_dir=${default}
-    fi
-
-    if [[ -d ${seafile_data_dir} && -f ${seafile_data_dir}/seafile.conf ]]; then
-        echo
-        echo "It seems that you have already existing seafile data in ${seafile_data_dir}."
-        echo "Would you like to use the existing seafile data?"
-        if ! read_yes_no; then
-            echo "You have chosen not to use existing seafile data in ${seafile_data_dir}"
-            echo "You need to specify a different seafile data directory or remove ${seafile_data_dir} before continuing."
-            get_seafile_data_dir
-        else
-            use_existing_seafile="true"
-        fi
-    elif [[ -d ${seafile_data_dir} && $(ls -A ${seafile_data_dir}) != "" ]]; then
-        echo
-        echo "${seafile_data_dir} is an existing non-empty directory. Please specify a different directory"
-        echo
-        get_seafile_data_dir
-    elif [[ ! ${seafile_data_dir} =~ ^/ ]]; then
-        echo
-        echo "\"${seafile_data_dir}\" is not an absolute path. Please specify an absolute path."
-        echo
-        get_seafile_data_dir
-    elif [[ ! -d $(dirname ${seafile_data_dir}) ]]; then
-        echo
-        echo "The path $(dirname ${seafile_data_dir}) does not exist."
-        echo
-        get_seafile_data_dir
-    fi
-    echo
-}
 
 function gen_seafdav_conf () {
     mkdir -p ${default_conf_dir}
@@ -335,21 +215,20 @@ function copy_user_manuals() {
 
 check_sanity;
 welcome;
-sleep .5
 check_system_dependency;
-sleep .5
+
 
 check_existing_ccnet;
 if [[ ${use_existing_ccnet} != "true" ]]; then
-    get_server_name;
-    get_server_ip_or_domain;
-    get_ccnet_server_port;
+    server_name=SERVER_NAME
+    ip_or_domain=DOMAIN;
+    server_port=CCNET_PORT
 fi
 
-get_seafile_data_dir;
+seafile_data_dir=SEAFILE_DATA
 if [[ ${use_existing_seafile} != "true" ]]; then
-    get_seafile_server_port
-    get_fileserver_port
+    seafile_server_port=SEAFILE_PORT
+    fileserver_port=SEAHUB_PORT
 fi
 
 sleep .5
@@ -372,9 +251,7 @@ else
     printf "seafile data dir:   use existing data in    \033[33m${seafile_data_dir}\033[m\n"
 fi
 
-echo
-echo "If you are OK with the configuration, press [ENTER] to continue."
-read dummy
+
 
 ccnet_init=${INSTALLPATH}/seafile/bin/ccnet-init
 seaf_server_init=${INSTALLPATH}/seafile/bin/seaf-server-init
@@ -442,7 +319,7 @@ echo "Seahub is the web interface for seafile server."
 echo "Now let's setup seahub configuration. Press [ENTER] to continue"
 echo "-----------------------------------------------------------------"
 echo
-read dummy
+
 
 # echo "Please specify the email address and password for the seahub administrator."
 # echo "You can use them to login as admin on your seahub website."

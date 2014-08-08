@@ -1,7 +1,9 @@
 # Retrieve arguments
 domain=$1
 path=$2
+server_name=$3
 final_path=/var/www/seafile
+seafile_data=$final_path/seafile-data
 seafile_version=3.1.1
 
 # Check domain/path availability
@@ -25,16 +27,30 @@ sudo mv ../sources/'seafile-server_'$seafile_version'_x86-64.tar' $final_path/in
 # Set permissions to seafile directory
 sudo chown -R www-data: $final_path
 
+# Find available ports
+ccnet_port=10001
+seafile_port=12001
+seahub_port=8082
+
 # Modify install script with parameters
+sed -i "s@SERVER_NAME@$server_name@g" ../sources/setup-seafile.sh
+sed -i "s@DOMAIN@$domain@g" ../sources/setup-seafile.sh
+sed -i "s@CCNET_PORT@$ccnet_port@g" ../sources/setup-seafile.sh
+sed -i "s@SEAFILE_DATA@$seafile_data@g" ../sources/setup-seafile.sh
+sed -i "s@SEAFILE_PORT@$seafile_port@g" ../sources/setup-seafile.sh
+sed -i "s@SEAHUB_PORT@$seahub_port@g" ../sources/setup-seafile.sh
 
 # Run install script
-
+sudo cp ../sources/setup-seafile.sh $final_path/seafile-server-$seafile_version
+sudo chmod +x $final_path/seafile-server-$seafile_version/setup-seafile.sh
+sudo $final_path/seafile-server-$seafile_version/setup-seafile.sh
 
 # Start Seafile Server
 
 
 # Add Seafile Server to startup
 # TODO
+
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
