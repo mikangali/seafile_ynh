@@ -228,7 +228,7 @@ fi
 seafile_data_dir=SEAFILE_DATA
 if [[ ${use_existing_seafile} != "true" ]]; then
     seafile_server_port=SEAFILE_PORT
-    fileserver_port=SEAHUB_PORT
+    fileserver_port=SEAFILE_FILESERVER_PORT
 fi
 
 sleep .5
@@ -357,49 +357,6 @@ function get_seahub_admin_passwd () {
     fi
 }
 
-# get_seahub_admin_email;
-# sleep .5;
-# get_seahub_admin_passwd;
-# seahub_admin_passwd_enc=$(echo -n ${seahub_admin_passwd} | sha1sum | grep -o "[0-9a-f]*")
-# sleep .5;
-
-# printf "\n\n"
-# echo "This is your seahub admin username/password"
-# echo
-# printf "admin username:         \033[33m${seahub_admin_email}\033[m\n"
-# printf "admin password:         \033[33m**************\033[m\n\n"
-
-# echo
-# echo "If you are OK with the configuration, press [ENTER] to continue."
-# read dummy
-
-# usermgr_db_dir=${default_ccnet_conf_dir}/PeerMgr/
-# usermgr_db=${usermgr_db_dir}/usermgr.db
-
-# if [[ "${use_existing_ccnet}" != "true" ]]; then
-#     # create admin user/passwd entry in ccnet db
-#     if ! mkdir -p "${usermgr_db_dir}"; then
-#         echo "Failed to create seahub admin."
-#         err_and_quit;
-#     fi
-
-#     sql="CREATE TABLE IF NOT EXISTS EmailUser (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, email TEXT, passwd TEXT, is_staff bool NOT NULL, is_active bool NOT NULL, ctime INTEGER)";
-
-#     if ! sqlite3 "${usermgr_db}" "${sql}" ; then
-#         rm -f "${usermgr_db}"
-#         echo "Failed to create seahub admin."
-#         err_and_quit;
-#     fi
-
-#     sql="INSERT INTO EmailUser(email, passwd, is_staff, is_active, ctime) VALUES (\"${seahub_admin_email}\", \"${seahub_admin_passwd_enc}\", 1, 1, 0);"
-
-#     if ! sqlite3 "${usermgr_db}" "${sql}" ; then
-#         rm -f "${usermgr_db}"
-#         echo "Failed to create seahub admin."
-#         err_and_quit;
-#     fi
-# fi
-
 echo "Creating seahub database now... "
 echo
 
@@ -452,6 +409,7 @@ echo
 # copy user manuals to library template
 # -------------------------------------------
 copy_user_manuals;
+
 
 # -------------------------------------------
 # final message

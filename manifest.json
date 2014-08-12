@@ -36,6 +36,22 @@
                 },
                 "example": "Seafile",
                 "default": "Seafile"
+            },
+            {
+                "name": "admin_email",
+                "ask": {
+                    "en": "Choose an email"
+                },
+                "example": "admin@domain.com",
+                "default": "admin@domain.com"
+            },
+            {
+                "name": "admin_password",
+                "ask": {
+                    "en": "Choose a password"
+                },
+                "example": "123456",
+                "default": "123456"
             }
         ]
     }

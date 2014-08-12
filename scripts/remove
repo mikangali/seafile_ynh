@@ -7,3 +7,5 @@ sudo ./seahub.sh stop
 
 sudo rm -rf /var/www/seafile
 sudo rm -f /etc/nginx/conf.d/$domain.d/seafile.conf
+sudo rm -f /etc/init.d/seafile-server
+sudo rm -f /etc/init/seafile-server.conf
