@@ -72,6 +72,13 @@ echo 'MEDIA_URL = "'$path'/media/"' | sudo tee -a $final_path/seahub_settings.py
 echo 'SITE_ROOT = "'$path'/"' | sudo tee -a $final_path/seahub_settings.py
 echo 'FILE_SERVER_ROOT = "http://'$domain$path'"' | sudo tee -a $final_path/seahub_settings.py
 
+
+
+echo 'DEBUG = True' | sudo tee -a $final_path/seahub_settings.py
+
+
+
+
 # LDAP configuration
 echo '[LDAP]' | sudo tee -a $final_path/ccnet/ccnet.conf
 echo 'HOST = ldap://localhost:389' | sudo tee -a $final_path/ccnet/ccnet.conf
