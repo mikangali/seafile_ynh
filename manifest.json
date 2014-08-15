@@ -18,8 +18,7 @@
                 "ask": {
                     "en": "Choose a domain for Seafile"
                 },
-                "example": "domain.org",
-                "default": "wireynh2.mikangali.com"
+                "example": "domain.org"
             },
             {
                 "name": "path",
@@ -42,16 +41,14 @@
                 "ask": {
                     "en": "Enter an email for the administrator"
                 },
-                "example": "homer@domain.com",
-                "default": "admin@domain.com"
+                "example": "homer@domain.com"
             },
             {
                 "name": "admin_password",
                 "ask": {
                     "en": "Enter a password for the administrator"
                 },
-                "example": "**Sup3rS3cr3t**",
-                "default": "123456"
+                "example": "**Sup3rS3cr3t**"
             }
         ]
     }
