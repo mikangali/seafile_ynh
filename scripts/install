@@ -2,25 +2,32 @@
 domain=$1
 path=$2
 server_name=$3
-admin=$4
-admin_password=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
+admin_email=$4
+admin_password=$5
 final_path=/var/www/seafile
 seafile_data=$final_path/seafile-data
 seafile_version=3.1.1
+
+port=''
+findPort () {
+
+    port=$1
+
+    sudo yunohost app checkport $port
+    while [[ ! $? -eq 0 ]]
+        do
+            port=$(($port + 1))
+            sudo yunohost app checkport $port
+        done
+
+   return $port
+}
 
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a seafile
 if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
-
-# Check if admin exists
-sudo yunohost user list --json | grep -q "\"username\": \"$admin\""
-if [[ ! $? -eq 0 ]]; then
-    echo "Wrong admin"
-    exit 1
-fi
-sudo yunohost app setting seafile admin -v $admin
 
 # Check dependencies
 sudo apt-get install -y python2.7 python-setuptools python-simplejson python-imaging python-mysqldb sqlite3
@@ -39,15 +46,20 @@ sudo mv ../sources/'seafile-server_'$seafile_version'_x86-64.tar' $final_path/in
 sudo chown -R www-data: $final_path
 
 # Find available ports
-ccnet_port=10001
-seafile_port=12001
-seafile_fileserver_port=8082
-seahub_port=8000
+findPort 10001
+ccnet_port=$port
+findPort 12001
+seafile_port=$port
+findPort 8082
+seafile_fileserver_port=$port
+findPort 8000
+seahub_port=$port
 
-sudo yunohost app checkport $seahub_port
-sudo yunohost app checkport $seafile_fileserver_port
-sudo yunohost app checkport $seafile_port
-sudo yunohost app checkport $ccnet_port
+sudo yunohost app setting seafile ccnet_port -v $ccnet_port
+sudo yunohost app setting seafile seafile_port -v $seafile_port
+sudo yunohost app setting seafile seafile_fileserver_port -v $seafile_fileserver_port
+sudo yunohost app setting seafile seahub_port -v $seahub_port
+
 
 # Modify install script with parameters
 sed -i "s@SERVER_NAME@$server_name@g" ../sources/setup-seafile.sh
@@ -56,7 +68,7 @@ sed -i "s@CCNET_PORT@$ccnet_port@g" ../sources/setup-seafile.sh
 sed -i "s@SEAFILE_DATA@$seafile_data@g" ../sources/setup-seafile.sh
 sed -i "s@SEAFILE_PORT@$seafile_port@g" ../sources/setup-seafile.sh
 sed -i "s@SEAFILE_FILESERVER_PORT@$seafile_fileserver_port@g" ../sources/setup-seafile.sh
-sed -i "s/ADMIN_EMAIL/$admin/g" ../sources/check_init_admin.py
+sed -i "s/ADMIN_EMAIL/$admin_email/g" ../sources/check_init_admin.py
 sed -i "s/ADMIN_PASSWORD/$admin_password/g" ../sources/check_init_admin.py
 
 # Run install script
@@ -73,17 +85,11 @@ echo 'SITE_ROOT = "'$path'/"' | sudo tee -a $final_path/seahub_settings.py
 echo 'FILE_SERVER_ROOT = "http://'$domain$path'"' | sudo tee -a $final_path/seahub_settings.py
 
 
-
-echo 'DEBUG = True' | sudo tee -a $final_path/seahub_settings.py
-
-
-
-
 # LDAP configuration
 echo '[LDAP]' | sudo tee -a $final_path/ccnet/ccnet.conf
 echo 'HOST = ldap://localhost:389' | sudo tee -a $final_path/ccnet/ccnet.conf
 echo 'BASE = ou=users,dc=yunohost,dc=org' | sudo tee -a $final_path/ccnet/ccnet.conf
-echo 'LOGIN_ATTR = uid' | sudo tee -a $final_path/ccnet/ccnet.conf
+echo 'LOGIN_ATTR = mail' | sudo tee -a $final_path/ccnet/ccnet.conf
 
 
 # Symlink for media ( because only $path is accessible, not /seahub )
@@ -114,7 +120,9 @@ sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/seafile.conf
 sudo service nginx reload
 sudo yunohost app ssowatconf
 
-
 # Open port
-#sudo yunohost firewall allow $ccnet_port
-#sudo yunohost firewall allow $seafile_port
+sudo yunohost firewall allow $ccnet_port
+sudo yunohost firewall allow $seafile_port
+sudo yunohost firewall allow $seahub_port
+
+

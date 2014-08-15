@@ -10,5 +10,10 @@ sudo rm -f /etc/nginx/conf.d/$domain.d/seafile.conf
 sudo rm -f /etc/init.d/seafile-server
 sudo rm -f /etc/init/seafile-server.conf
 
-#sudo yunohost firewall deny $ccnet_port
-#sudo yunohost firewall deny $seafile_port
+ccnet_port=$(sudo yunohost app setting seafile ccnet_port)
+seafile_port=$(sudo yunohost app setting seafile seafile_port)
+seahub_port=$(sudo yunohost app setting seafile seahub_port)
+
+sudo yunohost firewall deny $ccnet_port
+sudo yunohost firewall deny $seafile_port
+sudo yunohost firewall deny $seahub_port

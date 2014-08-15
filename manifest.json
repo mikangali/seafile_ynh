@@ -38,12 +38,20 @@
                 "default": "Seafile"
             },
             {
-                "name": "admin",
+                "name": "admin_email",
                 "ask": {
-                    "en": "Choose a user"
+                    "en": "Enter an email for the administrator"
                 },
-                "example": "homer",
-                "default": "elie"
+                "example": "homer@domain.com",
+                "default": "admin@domain.com"
+            },
+            {
+                "name": "admin_password",
+                "ask": {
+                    "en": "Enter a password for the administrator"
+                },
+                "example": "**Sup3rS3cr3t**",
+                "default": "123456"
             }
         ]
     }
