@@ -53,8 +53,8 @@
             {
                 "name": "public_site",
                 "ask": {
-                    "en": "Is it a public site ?",
-                    "fr": "Est-ce un site public ?"
+                    "en": "Is it a public site ? If you want to use a desktop client or the smartphone app, make Seafile public.",
+                    "fr": "Est-ce un site public ? Pour utiliser un client sur PC ou l'application mobile, Seafile doit être public"
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
