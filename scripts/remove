@@ -14,6 +14,6 @@ ccnet_port=$(sudo yunohost app setting seafile ccnet_port)
 seafile_port=$(sudo yunohost app setting seafile seafile_port)
 seahub_port=$(sudo yunohost app setting seafile seahub_port)
 
-sudo yunohost firewall deny $ccnet_port
-sudo yunohost firewall deny $seafile_port
-sudo yunohost firewall deny $seahub_port
+sudo yunohost firewall disallow $ccnet_port
+sudo yunohost firewall disallow $seafile_port
+sudo yunohost firewall disallow $seahub_port

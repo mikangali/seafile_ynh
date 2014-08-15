@@ -49,6 +49,15 @@
                     "en": "Enter a password for the administrator"
                 },
                 "example": "**Sup3rS3cr3t**"
+            },
+            {
+                "name": "public_site",
+                "ask": {
+                    "en": "Is it a public site ?",
+                    "fr": "Est-ce un site public ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "Yes"
             }
         ]
     }

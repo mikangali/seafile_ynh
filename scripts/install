@@ -4,6 +4,7 @@ path=$2
 server_name=$3
 admin_email=$4
 admin_password=$5
+is_public=$6
 final_path=/var/www/seafile
 seafile_data=$final_path/seafile-data
 seafile_version=3.1.1
@@ -59,6 +60,8 @@ sudo yunohost app setting seafile ccnet_port -v $ccnet_port
 sudo yunohost app setting seafile seafile_port -v $seafile_port
 sudo yunohost app setting seafile seafile_fileserver_port -v $seafile_fileserver_port
 sudo yunohost app setting seafile seahub_port -v $seahub_port
+
+sudo yunohost app setting seafile is_public -v $is_public
 
 
 # Modify install script with parameters
@@ -126,3 +129,10 @@ sudo yunohost firewall allow $seafile_port
 sudo yunohost firewall allow $seahub_port
 
 
+if [ "$is_public" = "No" ];
+then
+	sudo yunohost app setting seafile skipped_uris -d
+	sudo yunohost app ssowatconf
+else
+	sudo yunohost app setting seafile skipped_uris -v "/"
+fi
